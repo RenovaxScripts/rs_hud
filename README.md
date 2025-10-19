@@ -1,4 +1,4 @@
-# Renovax rs_hud
+# Renovax Hud
 
 Lightweight and customizable HUD for FiveM (ESX / QBCore / Standalone) — designed for easy integration, voice system support, and clear configuration options.
 
