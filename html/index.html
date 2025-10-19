@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>RS HUD</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- CHARACTER HUD -->
+  <section id="character" class="character">
+    <div class="tile voice" data-key="voice">
+        <div class="progress-ring"></div>
+        <img id="voiceIcon" src="icons/mic.svg" alt="">
+    </div>
+
+
+    <div class="tile" data-key="hp"><img src="icons/hp.svg" alt=""></div>
+    <div class="tile" data-key="armor"><img src="icons/armor.svg" alt=""></div>
+    <div class="tile" data-key="hunger"><img src="icons/hunger.svg" alt=""></div>
+    <div class="tile" data-key="drink"><img src="icons/drink.svg" alt=""></div>
+    <div class="tile" data-key="stamina"><img src="icons/stamina.svg" alt=""></div>
+  </section>
+
+  <!-- VEHICLE HUD -->
+  <section id="vehicle" class="vehicle hidden">
+    <div class="compass" id="compass">
+      <span id="cPrev">SV</span>
+      <span id="cCur" class="active">S</span>
+      <span id="cNext">V</span>
+    </div>
+
+    <div class="veh">
+      <div class="veh-left">
+        <div class="speed">
+          <span id="speedBig">0</span>
+          <small id="unitBig">km/h</small>
+        </div>
+        <div class="rpm-text">RPM: <span id="rpmTxt">0</span></div>
+      </div>
+
+      <div class="veh-right">
+        <div class="fuel">
+          <img src="icons/fuel.svg" class="fuel-icon" alt="">
+          <div class="fuel-bar"><div id="fuelFill"></div></div>
+          <span id="fuelPct">0%</span>
+        </div>
+        <div class="street">
+          <span id="streetTop">—</span>
+          <span id="streetBottom">—</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script src="app.js"></script>
+</body>
+</html>
