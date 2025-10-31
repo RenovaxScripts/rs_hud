@@ -56,36 +56,49 @@ CreateThread(function()
     end
 end)
 
-local FW = { name = 'STANDALONE', esx=nil, qb=nil }
-
 
 -- ==== Helpers ====
 local function nui(a,d) SendNUIMessage({action=a,data=d}) end
 local function clamp(x) return math.max(0.0, math.min(1.0, x or 0.0)) end
 
 -- ==== Needs (Hunger/Drink bar) ====
-local needs = {hunger = 1.0, thirst = 1.0}
+
+-- ==== Needs (Hunger/Drink bar) ====
+
+local needs = { hunger = 1.0, thirst = 1.0 }
+
 CreateThread(function()
-  while true do
-    if FW.name == 'QBCORE' and FW.qb then
-      local pd = FW.qb.Functions.GetPlayerData() or {}
-      local md = pd.metadata or {}
-      needs.hunger = clamp((md.hunger or 100)/100)
-      needs.thirst = clamp((md.thirst or 100)/100)
-    elseif FW.name == 'ESX' and FW.esx then
-      FW.esx.TriggerServerCallback('rs_hud:getStatus', function(d)
-        if d then
-          needs.hunger = clamp(d.hunger or needs.hunger)
-          needs.thirst = clamp(d.thirst or needs.thirst)
-        end
-      end)
-    else
-      needs.hunger = needs.hunger
-      needs.thirst = needs.thirst
+    while FW.name == 'STANDALONE' do
+        Wait(500)
     end
-    Wait(1000)
-  end
+
+    if FW.name == 'ESX' then
+        print('[RS_HUD] Používám esx_status pro hunger/thirst.')
+        RegisterNetEvent('esx_status:onTick', function(status)
+            for _, st in ipairs(status) do
+                if st.name == 'hunger' then
+                    needs.hunger = clamp(st.percent / 100.0)
+                elseif st.name == 'thirst' then
+                    needs.thirst = clamp(st.percent / 100.0)
+                end
+            end
+        end)
+    elseif FW.name == 'QBCORE' then
+        print('[RS_HUD] Používám QBCore metadata pro hunger/thirst.')
+        CreateThread(function()
+            while true do
+                local pd = FW.qb.Functions.GetPlayerData() or {}
+                local md = pd.metadata or {}
+                needs.hunger = clamp((md.hunger or 100) / 100)
+                needs.thirst = clamp((md.thirst or 100) / 100)
+                Wait(1000)
+            end
+        end)
+    else
+        print('[RS_HUD] Standalone režim – hunger/thirst se neaktualizují.')
+    end
 end)
+
 
 -- ==== Stamina ====
 local staminaSkill, runTimer = 1.0, 0.0
@@ -232,5 +245,35 @@ CreateThread(function()
   end
 end)
 
+-- ==== Auto-reset minimap after load/spawn ====
+
+AddEventHandler('playerSpawned', function()
+    mapLoaded = false
+    Wait(1000)
+    print('[RS_HUD] 🧭 PlayerSpawned – mapa se resetuje...')
+    setupmap()
+    Wait(1000)
+    mapLoaded = false
+    setupmap()
+end)
 
 
+--[[
+if FW.name == 'ESX' and FW.esx then
+  RegisterNetEvent('esx:playerLoaded', function()
+      mapLoaded = false 
+      Wait(1000)
+      print('[RS_HUD] 🧭 ESX playerLoaded – mapa se resetuje...')
+      setupmap()
+  end)
+end
+
+if FW.name == 'QBCORE' and FW.qb then
+  RegisterNetEvent('QBCore:Client:OnPlayerLoaded', function()
+      mapLoaded = false
+      Wait(1000)
+      print('[RS_HUD] 🧭 QBCore playerLoaded – mapa se resetuje...')
+      setupmap()
+  end)
+end
+]]

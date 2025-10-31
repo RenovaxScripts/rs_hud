@@ -1,7 +1,7 @@
 Config = {}
 
 -- Framework: 'AUTO' | 'ESX' | 'QBCORE' | 'STANDALONE'
-Config.Framework = 'AUTO'
+Config.Framework = 'ESX'
 
 -- Voice system: 'AUTO' | 'PMA' | 'SALTY' | 'TOKO' | 'MUMBLE' | 'STANDALONE'
 Config.VoiceSystem = 'PMA'
