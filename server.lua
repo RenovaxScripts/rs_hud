@@ -4,7 +4,6 @@ local usingESX, usingQB = false, false
 CreateThread(function()
     Wait(500)
 
-    -- ✅ Detekce frameworku
     if Config.Framework == 'ESX' or (Config.Framework == 'AUTO' and GetResourceState('es_extended') == 'started') then
         print('[RS_HUD] Framework: ESX – čekám na inicializaci...')
         repeat
@@ -15,7 +14,6 @@ CreateThread(function()
         usingESX = true
         print('[RS_HUD] Framework: ESX načten.')
 
-        -- 💡 Registrace callbacku po načtení ESX
         ESX.RegisterServerCallback('rs_hud:getStatus', function(source, cb)
             local xPlayer = ESX.GetPlayerFromId(source)
             if not xPlayer then
@@ -73,3 +71,4 @@ CreateThread(function()
         end)
     end
 end)
+
